@@ -12,7 +12,7 @@ namespace CatalogAPI.Products.CreateProduct
     public record CreateProductResult(
         Guid Id);
 
-    internal class CreateProductCommandHandler 
+    internal class CreateProductCommandHandler (IDocumentSession documentSession)
         : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
@@ -31,9 +31,11 @@ namespace CatalogAPI.Products.CreateProduct
             };
 
             //save product to database (omitted for brevity) - TODO: Implement database save logic here
+            documentSession.Store(product);
+            await documentSession.SaveChangesAsync(cancellationToken);
 
             //return the result with the new product ID
-            return new CreateProductResult(Guid.NewGuid());
+            return new CreateProductResult(product.Id);
         }
     }
 }
