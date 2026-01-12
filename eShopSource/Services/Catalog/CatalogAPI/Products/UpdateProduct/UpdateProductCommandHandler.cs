@@ -8,7 +8,7 @@ namespace CatalogAPI.Products.UpdateProduct
         string ImageFile,
         decimal Price) : ICommand<UpdateProductResult>;
     public record UpdateProductResult(bool IsUpdated);
-    internal class UpdateProductHandler(IDocumentSession session)
+    internal class UpdateProductCommandHandler(IDocumentSession session)
         : ICommandHandler<UpdateProductCommand, UpdateProductResult>
     {
         public async Task<UpdateProductResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
