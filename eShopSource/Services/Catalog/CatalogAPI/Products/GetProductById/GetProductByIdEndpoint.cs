@@ -2,13 +2,7 @@
 namespace CatalogAPI.Products.GetProductById
 {
     public record GetProductByIdRequest(Guid Id);
-    public record GetProductByIdResponse(
-        Guid Id,
-        string Name,
-        List<string> Category,
-        string Description,
-        string ImageFile,
-        decimal Price);
+    public record GetProductByIdResponse(Product Product);
 
     public class GetProductByIdEndpoint : ICarterModule
     {
