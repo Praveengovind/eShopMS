@@ -4,6 +4,16 @@ namespace CatalogAPI.Products.DeleteProduct
     public record DeleteProductCommand(Guid id) : ICommand<DeleteProductResult>;
     public record DeleteProductResult(bool isDeleted);
 
+    public class DeleteProductCommandValidator
+        : AbstractValidator<DeleteProductCommand>
+    {
+        public DeleteProductCommandValidator()
+        {
+            RuleFor(x => x.id)
+                .NotEmpty().WithMessage("Product ID is required.");
+        }
+    }
+
     internal class DeleteProductCommandHandler(IDocumentSession session)
         : ICommandHandler<DeleteProductCommand, DeleteProductResult>
     {

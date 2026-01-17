@@ -1,4 +1,6 @@
-﻿namespace CatalogAPI.Products.CreateProduct
+﻿using FluentValidation;
+
+namespace CatalogAPI.Products.CreateProduct
 {
     public record CreateProductCommand(
         string Name,
@@ -9,11 +11,20 @@
     public record CreateProductResult(
         Guid Id);
 
-    internal class CreateProductCommandHandler (IDocumentSession documentSession)
+    internal class CreateProductCommandHandler 
+        (IDocumentSession documentSession)
         : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
+            //validate the command - manual validation approach - Removed
+            //var validationResult = await validator.ValidateAsync(command, cancellationToken);
+            //var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+            //if (!validationResult.IsValid)
+            //{
+            //    throw new ValidationException(errors.FirstOrDefault());
+            //}
+
             // Business logic goes here...
 
             //create a new product entity from command object
