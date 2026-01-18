@@ -18,7 +18,7 @@ builder.Services.AddCarter();
 
 builder.Services.AddMarten(options =>
 {
-    options.Connection(builder.Configuration.GetConnectionString("MartenDB")!);
+    options.Connection(builder.Configuration.GetConnectionString("CatalogDB")!);
 
 }).UseLightweightSessions();
 
@@ -29,7 +29,7 @@ if (builder.Environment.IsDevelopment())
 
 builder.Services
     .AddHealthChecks()
-    .AddNpgSql(builder.Configuration.GetConnectionString("MartenDB")!,
+    .AddNpgSql(builder.Configuration.GetConnectionString("CatalogDB")!,
     name: "CatalogDB-Check",
     tags: new[] { "ready" });
 
