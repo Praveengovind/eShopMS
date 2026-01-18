@@ -19,7 +19,19 @@ builder.Services.AddCarter();
 builder.Services.AddMarten(options =>
 {
     options.Connection(builder.Configuration.GetConnectionString("MartenDB")!);
+
 }).UseLightweightSessions();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<InitialCatalogData>();
+}
+
+builder.Services
+    .AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("MartenDB")!,
+    name: "CatalogDB-Check",
+    tags: new[] { "ready" });
 
 var app = builder.Build();
 
@@ -55,5 +67,10 @@ app.MapCarter();
 //});
 
 app.UseExceptionHandler(options => { });
+
+app.UseHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = (check) => check.Tags.Contains("ready"),
+});
 
 app.Run();
