@@ -16,13 +16,13 @@ namespace BuildingBlocks.Behaviors
                 .Select(v => v.ValidateAsync(context, cancellationToken)));
 
             var failures = validationResults
+                .Where(r => r.Errors.Any())
                 .SelectMany(r => r.Errors)
-                .Where(f => f != null)
                 .ToList();
 
             if (failures.Any())
             {
-                throw new ValidationException("Validation exception", failures);
+                throw new ValidationException(failures);
             }
 
             return await next();

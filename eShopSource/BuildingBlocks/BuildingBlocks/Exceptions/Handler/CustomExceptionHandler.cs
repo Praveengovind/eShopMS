@@ -52,10 +52,9 @@ namespace BuildingBlocks.Exceptions.Handler
 
             problemDetailsResponse.Extensions.Add("traceId", context.TraceIdentifier);
 
-            if(exception is ValidationException validationEx && 
-               validationEx.ValidationResult != ValidationResult.Success)
+            if(exception is FluentValidation.ValidationException validationEx)
             {
-                problemDetailsResponse.Extensions.Add("errors", validationEx.ValidationResult);
+                problemDetailsResponse.Extensions.Add("errors", validationEx.Errors);
             }
 
             context.Response.StatusCode = problemDetails.Status;

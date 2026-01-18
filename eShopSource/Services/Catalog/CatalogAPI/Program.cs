@@ -1,5 +1,3 @@
-using FluentValidation;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var assembly = typeof(Program).Assembly;
@@ -13,6 +11,7 @@ builder.Services.AddMediatR(config =>
 builder.Services.AddValidatorsFromAssembly(assembly);
 
 // Add services to the container.
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddCarter();
 
 builder.Services.AddMarten(options =>
@@ -26,32 +25,33 @@ var app = builder.Build();
 app.MapCarter();
 
 // Exception handling
-app.UseExceptionHandler(ex =>
-{
-    ex.Run(async context =>
-    {
-        var exception = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
-        if (exception is null)
-        {            
-            return;
-        }
+//app.UseExceptionHandler(ex =>
+//{
+//    ex.Run(async context =>
+//    {
+//        var exception = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+//        if (exception is null)
+//        {            
+//            return;
+//        }
 
-        var problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
-        {
-            Title = exception.Message,
-            Status = 500,
-            Detail = exception.StackTrace
-        };
+//        var problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
+//        {
+//            Title = exception.Message,
+//            Status = 500,
+//            Detail = exception.StackTrace
+//        };
 
-        var logger = app.Services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(exception, exception.Message);
+//        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+//        logger.LogError(exception, exception.Message);
 
-        context.Response.ContentType = "application/problem+json";
-        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        
-        await context.Response.WriteAsJsonAsync(problemDetails);
-    });
-});
+//        context.Response.ContentType = "application/problem+json";
+//        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
+//        await context.Response.WriteAsJsonAsync(problemDetails);
+//    });
+//});
+
+app.UseExceptionHandler(options => { });
 
 app.Run();
