@@ -6,6 +6,8 @@ builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssembly(assembly);
     //Pipline behavior for validation
     config.AddOpenBehavior(typeof(BuildingBlocks.Behaviors.ValidationBehavior<,>));
+    //Pipline behavior for logging
+    config.AddOpenBehavior(typeof(BuildingBlocks.Behaviors.LoggingBehavior<,>));
 });
 
 builder.Services.AddValidatorsFromAssembly(assembly);
