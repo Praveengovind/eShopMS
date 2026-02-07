@@ -1,0 +1,25 @@
+﻿
+namespace Basket.API.Basket.StoreBasket
+{
+    public record StoreBasketRequest(ShoppingCart ShoppingCart);
+    public record StoreBasketResponse(bool IsSuccess);
+
+    public class StoreBasketEndpoint : ICarterModule
+    {
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapPost("/basket",
+               async (StoreBasketRequest request, ISender sender) =>
+               {
+                   var result = await sender.Send(new StoreBasketCommand(request.ShoppingCart));
+                   var response = result.Adapt<StoreBasketResponse>();
+                   return Results.Ok(response);
+               })
+                .WithName("StoreBasket")
+                .Produces<StoreBasketResponse>(StatusCodes.Status200OK)
+                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .WithSummary("Store a shopping cart")
+                .WithDescription("Store a shopping cart for a user");
+        }
+    }
+}
