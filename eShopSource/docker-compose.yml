@@ -7,6 +7,10 @@ services:
   basketdb:
     image: postgres:18-alpine
 
+  distributedcache:
+    image: redis 
+
+  # microservices definition starts here
   catalogapi:
     image: ${DOCKER_REGISTRY-}catalogapi
     build:
