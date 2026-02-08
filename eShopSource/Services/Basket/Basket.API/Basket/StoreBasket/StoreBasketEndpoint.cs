@@ -11,7 +11,8 @@ namespace Basket.API.Basket.StoreBasket
             app.MapPost("/basket",
                async (StoreBasketRequest request, ISender sender) =>
                {
-                   var result = await sender.Send(new StoreBasketCommand(request.ShoppingCart));
+                   var command = request.Adapt<StoreBasketCommand>();
+                   var result = await sender.Send(command);
                    var response = result.Adapt<StoreBasketResponse>();
                    return Results.Ok(response);
                })

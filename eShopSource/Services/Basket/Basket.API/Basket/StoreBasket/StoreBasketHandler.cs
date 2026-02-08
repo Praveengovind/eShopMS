@@ -13,13 +13,15 @@ public class StoreBasketCommandValidator : AbstractValidator<StoreBasketCommand>
     }
 }
 
-public class StoreBasketHandler
+public class StoreBasketHandler(IBasketRepository basketRepository)
         : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
-    public async Task<StoreBasketResult> Handle(StoreBasketCommand request, CancellationToken cancellationToken)
+    public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
-        ShoppingCart shoppingCart = request.ShoppingCart;
+        ShoppingCart shoppingCart = command.ShoppingCart;
 
-        throw new NotImplementedException();
+        await basketRepository.StoreBasketAsync(shoppingCart,cancellationToken);
+
+        return new StoreBasketResult(IsSuccess: true);
     }
 }
