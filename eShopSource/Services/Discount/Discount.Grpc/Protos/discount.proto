@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option csharp_namespace = "Discount.Grpc";
+
+package discount;
+
+//service definition for the discount microservice
+service DiscountService {
+  rpc GetDiscount (GetDiscountRequest) returns (CouponModel);
+  rpc CreateDiscount (CreateDiscountRequest) returns (CouponModel);
+  rpc UpdateDiscount (UpdateDiscountRequest) returns (CouponModel);
+  rpc DeleteDiscount (DeleteDiscountRequest) returns (DeleteDiscountResponse);
+}
+
+message GetDiscountRequest {
+  string product_name = 1; // The name of the product to get the discount for
+}
+
+message CouponModel {
+  int32 id = 1; // The unique identifier of the coupon
+  string product_name = 2; // The name of the product associated with the coupon
+  string description = 3; // A description of the discount
+  double amount = 4; // The amount of the discount
+}
+
+message CreateDiscountRequest {
+  CouponModel coupon = 1; // The coupon details to create
+}
+
+message UpdateDiscountRequest {
+  CouponModel coupon = 1; // The coupon details to create
+}
+
+message DeleteDiscountRequest {
+  int32 id = 1; // The unique identifier of the coupon
+}
+
+message DeleteDiscountResponse {
+  bool success = 1; // Indicates whether the deletion was successful
+}
