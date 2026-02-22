@@ -31,6 +31,11 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
 
+//Grpc
+builder.Services.AddGrpcClient<DiscountService.DiscountServiceClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]);
+});
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
